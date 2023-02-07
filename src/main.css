@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  color: #242424;
+}
+
+div {
+  font-family: Inter;
+  font-weight: 600;
+}
