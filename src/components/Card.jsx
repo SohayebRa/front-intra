@@ -35,6 +35,8 @@ const Card = ({ userData, page }) => {
     }
   };
 
+  const options = { day: "numeric", month: "long" };
+
   return (
     <div className="flex justify-center mt-10 ">
       <div className="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white border-gray-300 border">
@@ -68,7 +70,7 @@ const Card = ({ userData, page }) => {
           <p className="text-gray-600 text-base mb-1 flex items-center gap-2">
             <i className="fa-solid fa-cake-candles text-red-600"></i>
             Anniversaire:{" "}
-            {new Date(userData.birthdate).toLocaleDateString("fr")}
+            {new Date(userData.birthdate).toLocaleDateString("fr", options)}
           </p>
           {page === "list" ? (
             <div className="flex gap-4 items-center mt-4">
