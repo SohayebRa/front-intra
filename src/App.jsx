@@ -7,6 +7,7 @@ import Home from "./views/Home";
 import List from "./views/List";
 import Login from "./views/Login";
 import Add from "./views/Add";
+import Edit from "./views/edit";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="list" element={<List />} />
           <Route path="add" element={<Add />} />
+          <Route path="edit/:id" element={<Edit />} />
         </Routes>
       </IntraProvider>
     </BrowserRouter>

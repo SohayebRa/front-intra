@@ -6,10 +6,20 @@ const IntraProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") ?? "");
   const [userId, setUserId] = useState(localStorage.getItem("userId") ?? "");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <IntraContext.Provider
-      value={{ data, setData, token, setToken, userId, setUserId }}
+      value={{
+        data,
+        setData,
+        token,
+        setToken,
+        userId,
+        setUserId,
+        isAdmin,
+        setIsAdmin,
+      }}
     >
       {children}
     </IntraContext.Provider>

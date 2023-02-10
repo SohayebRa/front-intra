@@ -8,11 +8,10 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 function List() {
-  const { data, setData, token, userId } = useContext(IntraContext);
+  const { data, setData, token, setIsAdmin, userId } = useContext(IntraContext);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,11 +30,9 @@ function List() {
   }, [token]);
 
   useEffect(() => {
-    if (data) {
-      const user = data.find((user) => user.id === userId);
-      if (user && user.is_admin) {
-        setIsAdmin(true);
-      }
+    const selectedUser = data.find((user) => user.id === Number(userId));
+    if (selectedUser && selectedUser.is_admin) {
+      setIsAdmin(true);
     }
   }, [data, userId]);
 
@@ -110,7 +107,7 @@ function List() {
             {filteredData ? (
               filteredData.map((user) => (
                 <div key={user.id} className="col-span-1">
-                  <Card userData={user} page="list" isAdmin={isAdmin} />
+                  <Card userData={user} page="list" />
                 </div>
               ))
             ) : (

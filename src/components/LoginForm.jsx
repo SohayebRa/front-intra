@@ -6,26 +6,22 @@ import clientAxios from "../services/axios";
 import Swal from "sweetalert2";
 
 const LoginForm = () => {
-  const [error, setError] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
 
-  const [credentials, setCredentials] = useState({});
-
-  const { token, userId, setToken, setUserId } = useContext(IntraContext);
+  const { setToken, setUserId } = useContext(IntraContext);
 
   const navigate = useNavigate();
 
   const loginUser = async () => {
     try {
-      const response = await clientAxios.post("/signin", credentials);
-      console.log("Before", response, token, userId);
+      const response = await clientAxios.post("/signin", user);
 
       // Put token in localstorage
       setToken(response.data.token);
       setUserId(response.data.userId);
-
-      console.log("Done", token, userId);
 
       Swal.fire("Login Successfull", "You have been logged", "success");
 
@@ -41,22 +37,12 @@ const LoginForm = () => {
     }
   };
 
-  const emailRegex = /\S+@\S+\.\S+/;
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.id]: e.target.value });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    // if (!email || !password) {
-    //   setError("Veuillez remplir tous les champs");
-    // } else if (!emailRegex.test(email)) {
-    //   setError("Veuillez utiliser une adresse mail valide");
-    // } else if (password.length < 4) {
-    //   setError("Le password doit contenir au minimum 8 caractères");
-    // } else {
-    setCredentials({
-      email,
-      password,
-    });
     loginUser();
   };
 
@@ -69,8 +55,8 @@ const LoginForm = () => {
             type="email"
             id="email"
             placeholder="ex: owen.lopez@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={user.email}
+            onChange={handleChange}
             className="w-full border border-gray-400 py-3 px-4 rounded-md placeholder:font-medium"
           />
         </div>
@@ -80,8 +66,8 @@ const LoginForm = () => {
             type="password"
             id="password"
             placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={user.password}
+            onChange={handleChange}
             className="w-full border border-gray-400 py-3 px-4 rounded-md placeholder:font-medium"
           />
         </div>

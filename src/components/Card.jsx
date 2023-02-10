@@ -3,8 +3,8 @@ import clientAxios from "../services/axios";
 import { useContext } from "react";
 import { IntraContext } from "../context/IntraContext";
 
-const Card = ({ userData, page, isAdmin }) => {
-  const { token, setData, userId } = useContext(IntraContext);
+const Card = ({ userData, page }) => {
+  const { token, data, setData, isAdmin } = useContext(IntraContext);
 
   const userAge = (birthdate) => {
     const birthDate = new Date(birthdate);
@@ -16,15 +16,13 @@ const Card = ({ userData, page, isAdmin }) => {
 
   const handleDelete = async (id) => {
     try {
-      console.log(token, userId);
       if (!isAdmin) {
         throw "Action not allowed!";
       }
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
-          userId,
+          Authorization: "Bearer " + token,
         },
       };
 
@@ -89,9 +87,12 @@ const Card = ({ userData, page, isAdmin }) => {
               </p>
               {isAdmin ? (
                 <div className="flex items-center h-full w-1/2 py-1 gap-2">
-                  <button className="bg-gray-700 hover:bg-gray-800 text-white text-center font-medium p-1 w-full">
+                  <a
+                    href={`/edit/${userData.id}`}
+                    className="bg-gray-700 hover:bg-gray-800 text-white text-center font-medium p-1 w-full"
+                  >
                     <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
+                  </a>
                   <button
                     onClick={() => handleDelete(userData.id)}
                     className="bg-red-700 hover:bg-red-800 text-white text-center font-medium p-1 w-full"

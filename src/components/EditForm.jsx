@@ -1,12 +1,12 @@
-// AddForm Component
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+// EditForm Component
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { IntraContext } from "../context/IntraContext";
 import clientAxios from "../services/axios";
 import Swal from "sweetalert2";
 
-const AddForm = () => {
-  // const [credentials, setCredentials] = useState({});
+const EditForm = () => {
+  const [credentials, setCredentials] = useState({});
   const { token } = useContext(IntraContext);
   const [user, setUser] = useState({
     gender: "",
@@ -23,6 +23,7 @@ const AddForm = () => {
     isAdmin: false,
   });
 
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,10 +32,14 @@ const AddForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addUser();
+    updateUser();
   };
 
-  const addUser = async () => {
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
     try {
       const config = {
         headers: {
@@ -42,14 +47,47 @@ const AddForm = () => {
         },
       };
 
-      const response = await clientAxios.post("/signup", user, config);
+      const response = await clientAxios.get(`/${id}`, config);
+      console.log(response.data);
+
+      const userData = {
+        gender: response.data.gender,
+        firstName: response.data.first_name,
+        lastName: response.data.last_name,
+        email: response.data.email,
+        password: "",
+        phone: response.data.phone.replace(/[^\d]/g, ""),
+        birthdate: response.data.birthdate,
+        city: response.data.city,
+        country: response.data.country,
+        photo: response.data.photo,
+        category: response.data.category,
+        isAdmin: response.data.is_admin,
+      };
+
+      setUser(userData);
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        type: "error",
+        title: "There is an error",
+        text: error,
+      });
+    }
+  };
+
+  const updateUser = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+
+      const response = await clientAxios.put(`/${id}`, user, config);
       console.log(response);
 
-      Swal.fire(
-        "Created Successfully",
-        "You have created a new user",
-        "success"
-      );
+      Swal.fire("Edited Successfully", "You have edited the user", "success");
 
       // redirect
       navigate("/");
@@ -219,11 +257,11 @@ const AddForm = () => {
           onClick={handleSubmit}
           className="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md py-4"
         >
-          Ajouter
+          Modifier
         </button>
       </form>
     </div>
   );
 };
 
-export default AddForm;
+export default EditForm;
