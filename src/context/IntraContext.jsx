@@ -6,7 +6,9 @@ const IntraProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") ?? "");
   const [userId, setUserId] = useState(localStorage.getItem("userId") ?? "");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(
+    localStorage.getItem("isAdmin") ?? false
+  );
 
   return (
     <IntraContext.Provider

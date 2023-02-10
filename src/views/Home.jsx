@@ -9,7 +9,7 @@ import Card from "../components/Card";
 
 function Home() {
   const [selectedUser, setSelectedUser] = useState(null);
-  const { data, setData, token, userId } = useContext(IntraContext);
+  const { data, setData, token, userId, setIsAdmin } = useContext(IntraContext);
 
   const navigate = useNavigate();
 
@@ -31,6 +31,14 @@ function Home() {
     localStorage.setItem("token", token);
     localStorage.setItem("userId", userId);
   }, [token, userId]);
+
+  useEffect(() => {
+    const selectedUser = data.find((user) => user.id === Number(userId));
+    if (selectedUser && selectedUser.is_admin) {
+      localStorage.setItem("isAdmin", true);
+      setIsAdmin(true);
+    }
+  }, [data, userId]);
 
   const [user] = data.filter((user) => user.id === userId);
 

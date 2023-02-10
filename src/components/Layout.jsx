@@ -1,22 +1,28 @@
 // Layout Component
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { IntraContext } from "../context/IntraContext";
 
 const Layout = ({ children }) => {
-  const { token, setToken, setUserId } = useContext(IntraContext);
+  const { token, setToken, setUserId, isAdmin, setIsAdmin } =
+    useContext(IntraContext);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
+    localStorage.removeItem("isAdmin");
     setToken("");
     setUserId("");
+    setIsAdmin(false);
   };
 
   return (
     <>
       <div className="flex flex-col h-screen w-screen">
         <div className="bg-slate-800 w-full flex items-center justify-between h-[8%]">
-          <div className="font-extrabold text-white px-10">INTRANET.</div>
+          <a href="/" className="font-extrabold text-white px-10">
+            INTRANET.
+          </a>
           {token ? (
             <div className="flex h-full">
               <a
@@ -26,13 +32,15 @@ const Layout = ({ children }) => {
                 <i className="fa-solid fa-list"></i>
                 Liste
               </a>
-              <a
-                href="/add"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium h-full px-12 flex gap-3 items-center"
-              >
-                <i className="fa-solid fa-plus"></i>
-                Ajouter
-              </a>
+              {isAdmin ? (
+                <a
+                  href="/add"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium h-full px-12 flex gap-3 items-center"
+                >
+                  <i className="fa-solid fa-plus"></i>
+                  Ajouter
+                </a>
+              ) : null}
               <a
                 onClick={handleLogout}
                 href="/login"
